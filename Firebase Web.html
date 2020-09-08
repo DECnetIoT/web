@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html><head>
+
+   <style type="text/css">
+		body{<!--height: 100%;
+    <!--background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;-->
+	
+	min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: auto;
+    background-position: 0px 100px;
+	position:;
+    top: 0;
+    left: 0;
+}
+ 
+@media screen and (max-width: 1024px) {
+    body {
+     left: 50%;
+     margin-left: -512px;   /* 50% */
+    }
+}
+	}
+   </style>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Firebase Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./Firebase Web_files/bootstrap.min.css">
+    <script src="./Firebase Web_files/jquery.min.js.download"></script>
+    <script src="./Firebase Web_files/bootstrap.min.js.download"></script>
+    <script src="./Firebase Web_files/firebase.js.download"></script>
+	
+	<script type="text/javascript">
+window.setTimeout("renderDate()",1);
+days = new Array("Minggu","Senin","Selasa","Rabu","Kamis",
+"Jumat","Sabtu");
+months = new Array("Januari","Februari","Maret",
+"April","Mei","Juni","Juli","Agustus","September",
+"Oktober","November","Desember");
+
+function renderDate(){
+var mydate = new Date();
+var year = mydate.getYear();
+if (year < 2000) {
+if (document.all)
+year = "19" + year;
+else
+year += 1900;
+}
+var day = mydate.getDay();
+var month = mydate.getMonth();
+var daym = mydate.getDate();
+if (daym < 10)
+daym = "0" + daym;
+var hours = mydate.getHours();
+var minutes = mydate.getMinutes();
+var seconds = mydate.getSeconds();
+var dn = "AM";
+if (hours >= 12) {
+dn = "PM";
+hours = hours - 12;
+}
+if (hours == 0)
+hours = 12;
+if (minutes <= 9)
+minutes = "0" + minutes;
+if (seconds <= 9)
+seconds = "0" + seconds;
+document.getElementById("jam").innerHTML = "<B>"+days[day]+" "+daym+" "+months[month]+" "+year+"</B> | "+hours+":"+minutes+":"+seconds+" "+dn;
+setTimeout("renderDate()",1000)
+}
+</script>
+  </head>
+
+  <body>
+    <center>
+	<div id="jam" style="background: green; border: 1px dashed #000; 
+	padding: 20px; width: 700px;" align="center"></div>
+	</center>
+
+    <div class="container">
+	
+	<center><h1>WEMOS (Wetland Monitoring System)</h1></center>
+	<h3>Sensor Suhu</h3>
+	<p>Suhu Celcius : <font id="Celcius"></font>
+	<p>Kelembaban Udara : <font id="Humidity"></font>
+	<p>Deteksi Suhu : <font id="hasilSuhu"></font>
+	<p>
+	
+	<h3>Sensor Kelembaban Tanah</h3>
+	<p>Nilai Sensor Tanah : <font id="SoilMoistureNilai"></font>
+	<p>Kelembaban Tanah :	<font id="KelembabanTanah"></font>
+	<p>Deteksi Kelembaban : <font id="hasilTanah"></font>
+	<p>
+	
+	<h3>Sensor Gas/Asap</h3>
+	<p>LPG Gas : <font id="LPGGas"></font>
+	<p>Deteksi LPG : <font id="hasilLPG"></font>
+	<p>CO Gas : <font id="COGas"></font>
+	<p>Deteksi CO : <font id="hasilCO"></font>
+	<p>Smoke Asap : <font id="SmokeAsap"></font>
+	<p>Deteksi Smoke : <font id="hasilSmoke"></font>
+	<p>
+	
+	<h3>Sensor Api</h3>
+    <p>Deteksi Api :  <font id="hasilApi"></font>
+	<p>
+	
+	<h3>Sensor PH Meter</h3>
+	<p>Nilai ADC PH : <font id="NilaiADCPH"></font>
+	<p>Tegangan PH : <font id="TeganganPH"></font>
+    <p>Nilai PH Cairan : <font id="NilaiPHCairan"></font>
+	<p>Deteksi PH : <font id="hasilPH"></font>
+    <p>
+	
+	<h3>Sensor Air</h3>
+	<p>Tinggi Air : <font id="TinggiAir"></font>
+    
+<!--       <button onclick="writeUserData(&#39;aaa&#39;,&#39;bbb&#39;,&#39;ccc&#39;)">add data</button>		-->	
+    </div>
+   <!-- <script src="firebase.js"></script>-->
+  
+  
+
+
+<script>
+(function() { //###############event handler###################
+  const config = {
+    apiKey: "AIzaSyBy97Weur5RrC6tEGGhXZ4uaAjs_zVEXvM",
+    authDomain: "iot-wemos-acb58.firebaseapp.com",
+    databaseURL: "https://iot-wemos-acb58.firebaseio.com",
+    projectId: "iot-wemos-acb58",
+    storageBucket: "iot-wemos-acb58.appspot.com",
+    messagingSenderId: "1005871790462",
+    appId: "1:1005871790462:web:da8cdb0339373278b45b2f",
+    measurementId: "G-N0DMS3ELNH"
+  };
+
+	firebase.initializeApp(config);
+	//Suhu
+	//########### Celcius
+	firebase.database().ref().child('Celcius').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("Celcius").innerHTML=JSON.stringify(snap.val());
+    });
+	//########## Kelembaban Udara
+	firebase.database().ref().child('Humidity').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("Humidity").innerHTML=JSON.stringify(snap.val());
+    });
+	//########## Deteksi Suhu
+	firebase.database().ref().child('hasilSuhu').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilSuhu").innerHTML=JSON.stringify(snap.val());
+    });
+	
+	//Sensor Tanah
+	//######### Nilai Sensor Tanah
+	firebase.database().ref().child('SoilMoistureNilai').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("SoilMoistureNilai").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### Kelembaban Tanah
+	firebase.database().ref().child('KelembabanTanah').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("KelembabanTanah").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### Deteksi Kelembaban
+	firebase.database().ref().child('hasilTanah').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilTanah").innerHTML=JSON.stringify(snap.val());
+    });
+
+	//Sensor Gas/Asap
+	//######### LPGGas
+	firebase.database().ref().child('LPGGas').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("LPGGas").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### Deteksi LPGGas
+	firebase.database().ref().child('hasilLPG').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilLPG").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### COGas
+	firebase.database().ref().child('COGas').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("COGas").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### Deteksi COGas
+	firebase.database().ref().child('hasilCO').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilCO").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### SmokeAsap
+	firebase.database().ref().child('SmokeAsap').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("SmokeAsap").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### Deteksi SmokeAsap
+	firebase.database().ref().child('hasilSmoke').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilSmoke").innerHTML=JSON.stringify(snap.val());
+    });
+	
+	//Sensor Api
+	firebase.database().ref().child('DeteksiApi').on('value',snap => {
+		console.log("read");
+		console.log(snap.val());
+		document.getElementById("hasilApi").innerHTML=JSON.stringify(snap.val());
+		});
+	
+	//Sensor PH Meter
+	//######### NilaiADCPH
+	firebase.database().ref().child('NilaiADCPH').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("NilaiADCPH").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### TeganganPH
+	firebase.database().ref().child('TeganganPH').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("TeganganPH").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### NilaiPHCairan
+	firebase.database().ref().child('NilaiPHCairan').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("NilaiPHCairan").innerHTML=JSON.stringify(snap.val());
+    });
+	//######### hasilPH
+	firebase.database().ref().child('hasilPH').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("hasilPH").innerHTML=JSON.stringify(snap.val());
+    });
+	
+	//Sensor Air
+	//######### TinggiAir
+	firebase.database().ref().child('TinggiAir').on('value',snap => {
+	console.log("read");
+    console.log(snap.val());
+	document.getElementById("TinggiAir").innerHTML=JSON.stringify(snap.val());
+    });
+
+	
+}());
+
+
+</script>
+</body></html>
